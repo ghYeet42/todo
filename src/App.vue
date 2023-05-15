@@ -1,24 +1,21 @@
 <script setup>
 
-    import { ref } from 'vue'
+    import { ref, watch } from 'vue'
 
-    let todos = ref([])
-
-    let person = {
-        text: " ",
-        lastName: false,
-        id: 5566,
-        fullName : function() {
-            return this.firstName + " " + this.lastName;
-        }
-    };
+    let todos = ref(JSON.parse(window.localStorage.getItem('todos')))
 
     let newTodo = ref('')
+
+    
+    watch (todos, function(value) {
+        window.localStorage.setItem('todos', JSON.stringify(value))
+    }, {deep: true})
+
 
     function addTodo () {
         todos.value.push({
             text: newTodo.value, 
-            completed: false
+            complete: false
         })
 
         newTodo.value = ''
@@ -40,17 +37,15 @@
 
         <li v-for="(todo, index) in todos">
 
-            <input type="checkbox" v-model="todo.completed">
+            <input type="checkbox" id="check" checked="checked" v-model="todo.complete"><button @click="deleteTodo(index)">X</button>
 
             {{ todo.text }}
-
-            <button @click="deleteTodo(index)">X</button>
 
         </li>
         
     </ul>
 
-    <input v-model="newTodo" type="text" @keydown.enter="addTodo">
+    <input v-model="newTodo" type="text" id="tdta" @keydown.enter="addTodo">
     <button @click="addTodo">Add todo</button>
 
 </template>
@@ -59,13 +54,18 @@
 
 <style>
 
+body {
+    color: white;
+    background-color: black;
+}
+
 h1 {
     text-align: center;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-decoration: underline;
 }
 
-input {
+#tdta {
     margin: 0;
     position: absolute;
     top: 35%;
@@ -74,6 +74,24 @@ input {
     transform: translate(-50%, -50%);
     padding: 10px 25px;
 }
+
+.check {
+  height: 25px;
+  width: 25px;
+  background-color: rgb(175, 0, 0);
+}
+
+.checked {
+  background-color: #000000;
+}
+
+
+.check:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
 
 /* 
 
