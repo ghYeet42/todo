@@ -2,7 +2,7 @@
 
     import { ref, watch } from 'vue'
 
-    let todos = ref(JSON.parse(window.localStorage.getItem('todos')))
+    let todos = ref(JSON.parse(window.localStorage.getItem('todos')) ?? [])
 
     let newTodo = ref('')
 
@@ -31,15 +31,21 @@
 
 <template>
 
+    <head>
+        <link rel="stylesheet" ref="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+
     <h1>My todo App!</h1>
 
     <ul>
 
-        <li v-for="(todo, index) in todos">
+        <li v-for="(todo, index) in todos" :class="{completed: todo.complete}">
 
-            <input type="checkbox" id="check" checked="checked" v-model="todo.complete"><button @click="deleteTodo(index)">X</button>
+            <input type="checkbox" id="checkbox" checked="checked" class v-model="todo.complete">
 
             {{ todo.text }}
+
+            <button @click="deleteTodo(index)">x</button>
 
         </li>
         
@@ -55,8 +61,8 @@
 <style>
 
 body {
-    color: white;
-    background-color: black;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
 }
 
 h1 {
@@ -75,22 +81,38 @@ h1 {
     padding: 10px 25px;
 }
 
-.check {
-  height: 25px;
-  width: 25px;
-  background-color: rgb(175, 0, 0);
+.completed {
+    text-decoration: line-through;
+    background-color:bisque;
 }
 
-.checked {
-  background-color: #000000;
+input [type="checkbox"] {
+    height: 100px;
+    width: 100px;
+    background-color: rgb(0, 0, 0);
+    cursor: pointer;
+    font-size: 200px;
+}
+
+li {
+    text-align: center;
+}
+
+input [type="checkbox"]:after {
+    font-family: "Font Awesome 6 Free";
+    content: "/f772";
+    font-weight: 500;
+}
+
+input [type="checkbox"]:hover {
+
 }
 
 
-.check:after {
-  content: "";
-  position: absolute;
-  display: none;
+input [type="checkbox"]:checked:after {
+    display: block;
 }
+
 
 
 /* 
